@@ -19,7 +19,6 @@ func Assert(guard bool, text string) {
 
 func GetFuncName(f interface{}) string {
 	name := runtime.FuncForPC(reflect.ValueOf(f).Pointer()).Name()
-	fmt.Println(name)
 	arr := strings.Split(name, ".")
 	return strings.Split(arr[len(arr)-1], "-")[0]
 }

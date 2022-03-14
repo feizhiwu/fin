@@ -3,7 +3,7 @@ package fin
 type Display struct {
 	*Context
 	Render
-	Status int
+	status int
 	funcs  MF
 	checks struct {
 		verify  bool
@@ -27,21 +27,10 @@ func (d *Display) Delete(f func()) {
 	d.funcs["DELETE-"+GetFuncName(f)] = f
 }
 
-// checkAction 行为检查
-func (d *Display) checkAction(value string) bool {
-	d.Status = StatusWarn
-	action := d.GetHeader("action")
-	if action != "" && action == value {
-		d.Status = StatusOK
-		return true
-	}
-	return false
-}
-
 // Show 统一输出api数据
 func (d *Display) Show(mix interface{}) {
-	if d.Status == StatusInit {
-		d.Status = StatusOK
+	if d.status == StatusInit {
+		d.status = StatusOK
 	}
 	//默认json格式
 	if d.Render == nil {
@@ -52,7 +41,7 @@ func (d *Display) Show(mix interface{}) {
 
 // Validate 参数检测
 func (d *Display) Validate(val map[int]string, data map[string]interface{}) {
-	d.Status = StatusOK
+	d.status = StatusOK
 	for k, v := range val {
 		if data[v] == nil {
 			panic(k)
@@ -72,9 +61,9 @@ func (d *Display) CheckLogin(actions []string, verify bool) {
 	d.checks.actions = actions
 }
 
-// ForceLogin 检测是否登录
+// ForceLogin 强制登陆
 func (d *Display) ForceLogin() {
-	if d.params["login_uid"] == nil {
+	if d.Params["login_uid"] == nil {
 		panic(80003)
 	}
 }

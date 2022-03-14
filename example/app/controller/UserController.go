@@ -8,14 +8,12 @@ import (
 
 type UserController struct {
 	*fin.Display
-	params fin.MI
-	us     *service.UserService
+	us *service.UserService
 }
 
 func User(c *fin.Context) {
 	s := &UserController{
-		c.Display(),
-		c.GetParams(),
+		c.NewDisplay(),
 		new(service.UserService),
 	}
 	s.Get(s.list)
@@ -31,8 +29,8 @@ func (s *UserController) add() {
 		20001: "name",
 		20002: "password",
 	}
-	s.Validate(val, s.params)
-	s.us.Add(s.params)
+	s.Validate(val, s.Params)
+	s.us.Add(s.Params)
 	data := map[string]uint{
 		"id": s.us.UD.User.Id,
 	}
@@ -43,25 +41,25 @@ func (s *UserController) list() {
 	val := map[int]string{
 		80007: "page",
 	}
-	s.Validate(val, s.params)
-	s.us.GetList(s.params)
+	s.Validate(val, s.Params)
+	s.us.GetList(s.Params)
 	s.Show(s.us.UD.UserList)
 }
 
 func (s *UserController) info() {
-	s.HasKey(s.params)
-	s.us.GetInfo(albedo.MakeUint(s.params["id"]))
+	s.HasKey(s.Params)
+	s.us.GetInfo(albedo.MakeUint(s.Params["id"]))
 	s.Show(s.us.UD.User)
 }
 
 func (s *UserController) update() {
-	s.HasKey(s.params)
-	s.us.Update(s.params)
+	s.HasKey(s.Params)
+	s.us.Update(s.Params)
 	s.Show(fin.StatusOK)
 }
 
 func (s *UserController) delete() {
-	s.HasKey(s.params)
-	s.us.Delete(albedo.MakeUint(s.params["id"]))
+	s.HasKey(s.Params)
+	s.us.Delete(albedo.MakeUint(s.Params["id"]))
 	s.Show(fin.StatusOK)
 }

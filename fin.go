@@ -2,6 +2,7 @@ package fin
 
 import (
 	"github.com/jinzhu/gorm"
+	"log"
 	"net/http"
 	"strings"
 )
@@ -42,6 +43,9 @@ func Default() *Engine {
 }
 
 func (group *routerGroup) Group(prefix string) *routerGroup {
+	if prefix[0] != '/' {
+		prefix = "/" + prefix
+	}
 	engine := group.engine
 	newGroup := &routerGroup{
 		prefix: group.prefix + prefix,
@@ -105,10 +109,13 @@ func (engine *Engine) ConnectDB() map[string]*gorm.DB {
 	return db.connects
 }
 
-func (engine *Engine) Run(addr string) (err error) {
+func (engine *Engine) Run(address string) (err error) {
+	defer func() { Assert(err == nil, err.Error()) }()
 	Assert(configPath != "", "config path is not set")
 	Assert(messagePath != "", "message path is not set")
-	return http.ListenAndServe(addr, engine)
+	log.Printf("Listening and serving HTTP on %s\n", address)
+	err = http.ListenAndServe(address, engine)
+	return
 }
 
 func (engine *Engine) ServeHTTP(w http.ResponseWriter, req *http.Request) {

@@ -30,10 +30,9 @@ func Recovery() HandlerFunc {
 					message := fmt.Sprintf("%s", err)
 					log.Printf("%s\n\n", trace(message))
 				}
-				c.Display().Show(err)
+				c.NewDisplay().Show(err)
 			}
 		}()
-
 		c.Next()
 	}
 }

@@ -4,8 +4,8 @@ import (
 	"fin"
 )
 
-// Cors Cross-Origin Resource Share
-func Cors(c *fin.Context) {
+func Init(c *fin.Context) {
+	//Cors Cross-Origin Resource Share
 	c.Header("Access-Control-Allow-Origin", "*")
 	c.Header("Access-Control-Allow-Credentials", "true")
 	c.Header("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
