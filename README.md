@@ -10,7 +10,7 @@ gin+gorm教程传送门：https://github.com/feizhiwu/go-stage
 ```
     > git clone ...
     > cd fin
-    > go run  example/main.go
+    > go run example/main.go
 ```
 
 ### RESTful API curl
