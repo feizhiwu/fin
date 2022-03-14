@@ -1,23 +1,17 @@
 debug:
+  salt: d79695776a5b40f7cadbee1f91a85c82
   db:
-    datatype: mysql
-    hostname: localhost
-    database: test
-    username: root
-    password: 123456
-
-test:
-  db:
-    datatype: mysql
-    hostname: localhost-ttt
-    database: test
-    username: root
-    password: a1937258
-
-release:
-  db:
-    datatype: mysql
-    hostname: localhost-rrr
-    database: test
-    username: root
-    password: a1937258
+    main_db:
+      datatype: mysql
+      hostname: localhost
+      database: test
+      username: root
+      password: 123456
+      charset: utf8
+    client_db:
+      datatype: mysql
+      hostname: localhost
+      database: test
+      username: root
+      password: 123456
+      charset: utf8

@@ -74,7 +74,7 @@ func (d *Display) CheckLogin(actions []string, verify bool) {
 
 // ForceLogin 检测是否登录
 func (d *Display) ForceLogin() {
-	if d.Params["login_uid"] == nil {
+	if d.params["login_uid"] == nil {
 		panic(80003)
 	}
 }
@@ -83,16 +83,20 @@ func (d *Display) Run() {
 	action := d.GetHeader("action")
 	f := d.funcs[d.Method+"-"+action]
 	if f != nil {
-		if d.checks.verify && InArray(len(d.checks.actions), func(i int) bool {
-			return d.checks.actions[i] == action
-		}) {
-			d.ForceLogin()
-			f()
-		} else if !d.checks.verify && !InArray(len(d.checks.actions), func(i int) bool {
-			return d.checks.actions[i] == action
-		}) {
-			d.ForceLogin()
-			f()
+		if len(d.checks.actions) > 0 {
+			if d.checks.verify && InArray(len(d.checks.actions), func(i int) bool {
+				return d.checks.actions[i] == action
+			}) {
+				d.ForceLogin()
+				f()
+			} else if !d.checks.verify && !InArray(len(d.checks.actions), func(i int) bool {
+				return d.checks.actions[i] == action
+			}) {
+				d.ForceLogin()
+				f()
+			} else {
+				f()
+			}
 		} else {
 			f()
 		}

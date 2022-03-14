@@ -1,6 +1,7 @@
 package fin
 
 import (
+	"github.com/jinzhu/gorm"
 	"net/http"
 	"strings"
 )
@@ -97,6 +98,11 @@ func (engine *Engine) SetConfig(path string) {
 
 func (engine *Engine) SetMessage(path string) {
 	setMessage(path)
+}
+
+func (engine *Engine) ConnectDB() map[string]*gorm.DB {
+	db := connectDB()
+	return db.connects
 }
 
 func (engine *Engine) Run(addr string) (err error) {

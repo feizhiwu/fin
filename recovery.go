@@ -25,8 +25,11 @@ func Recovery() HandlerFunc {
 	return func(c *Context) {
 		defer func() {
 			if err := recover(); err != nil {
-				message := fmt.Sprintf("%s", err)
-				log.Printf("%s\n\n", trace(message))
+				//预设错误不输出stack trace
+				if _, ok := err.(int); !ok {
+					message := fmt.Sprintf("%s", err)
+					log.Printf("%s\n\n", trace(message))
+				}
 				c.Display().Show(err)
 			}
 		}()

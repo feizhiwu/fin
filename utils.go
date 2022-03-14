@@ -1,6 +1,7 @@
 package fin
 
 import (
+	"crypto/md5"
 	"fmt"
 	"log"
 	"os"
@@ -30,4 +31,20 @@ func InArray(n int, f func(int) bool) bool {
 		}
 	}
 	return false
+}
+
+func CopyParams(val []string, data map[string]interface{}) map[string]interface{} {
+	params := make(map[string]interface{})
+	for _, v := range val {
+		if data[v] != nil {
+			params[v] = data[v]
+		}
+	}
+	return params
+}
+
+func EncryptPass(pass string) string {
+	salt := Config("salt").(string)
+	sum := md5.Sum([]byte(pass + salt))
+	return fmt.Sprintf("%x", sum)
 }

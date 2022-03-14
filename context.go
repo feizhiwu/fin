@@ -13,18 +13,14 @@ type H map[string]interface{}
 const abortIndex int8 = math.MaxInt8 / 2
 
 type Context struct {
-	// origin objects
-	Writer  http.ResponseWriter
-	Request *http.Request
-	// request info
-	Path   string
-	Method string
-	Params map[string]interface{}
-	// response info
+	Writer     http.ResponseWriter
+	Request    *http.Request
+	Path       string
+	Method     string
 	StatusCode int
-	// middleware
-	handlers []HandlerFunc
-	index    int8
+	params     map[string]interface{}
+	handlers   []HandlerFunc
+	index      int8
 }
 
 func newContext(w http.ResponseWriter, req *http.Request) *Context {
@@ -46,8 +42,8 @@ func (c *Context) Next() {
 }
 
 func (c *Context) SetParams(key string, value interface{}) {
-	fmt.Println(c.Params)
-	c.Params[key] = value
+	fmt.Println(c.params)
+	c.params[key] = value
 }
 
 func (c *Context) GetParams() map[string]interface{} {
@@ -55,17 +51,17 @@ func (c *Context) GetParams() map[string]interface{} {
 	if len(raw) == 0 {
 		c.Request.ParseForm()
 		for k, v := range c.Request.Form {
-			c.Params[k] = v[0]
+			c.params[k] = v[0]
 		}
 	} else {
-		json.Unmarshal(raw, &c.Params)
+		json.Unmarshal(raw, &c.params)
 	}
-	json.Unmarshal(raw, &c.Params)
-	return c.Params
+	json.Unmarshal(raw, &c.params)
+	return c.params
 }
 
 func (c *Context) Param(key string) interface{} {
-	value, _ := c.Params[key]
+	value, _ := c.params[key]
 	return value
 }
 

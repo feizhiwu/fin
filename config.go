@@ -23,11 +23,7 @@ func Config(key string) interface{} {
 	fileData, _ := ioutil.ReadFile(configPath)
 	var config map[interface{}]interface{}
 	yaml.Unmarshal(fileData, &config)
-	if Mode() == ReleaseMode {
-		config = config["release"].(map[interface{}]interface{})
-	} else {
-		config = config["test"].(map[interface{}]interface{})
-	}
+	config = config[Mode()].(map[interface{}]interface{})
 	keys := strings.Split(key, ".")
 	length := len(keys)
 	if length == 1 {
