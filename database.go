@@ -36,6 +36,16 @@ func CommitDB(name string) {
 	}
 }
 
+func RollbackDB(name string) {
+	if cdb[GetGoroutineID()][name] != nil {
+		cdb[GetGoroutineID()][name].Rollback()
+		delete(cdb[GetGoroutineID()], name)
+	}
+	if len(cdb[GetGoroutineID()]) == 0 {
+		delete(cdb, GetGoroutineID())
+	}
+}
+
 func connectDB() {
 	dbc = make(MG)
 	cdb = make(map[uint64]MG)

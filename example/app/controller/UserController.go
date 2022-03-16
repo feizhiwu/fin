@@ -4,7 +4,6 @@ import (
 	"fin"
 	"fin/example/app/service"
 	"github.com/feizhiwu/gs/albedo"
-	"time"
 )
 
 type UserController struct {
@@ -39,7 +38,6 @@ func (s *UserController) add() {
 }
 
 func (s *UserController) list() {
-	time.Sleep(time.Second * 3)
 	val := map[int]string{
 		80007: "page",
 	}

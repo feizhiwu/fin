@@ -24,6 +24,9 @@ func trace(message string) string {
 func recovery(c *Context) {
 	defer func() {
 		if err := recover(); err != nil {
+			for _, v := range dbs {
+				RollbackDB(v)
+			}
 			message := fmt.Sprintf("%s", err)
 			logFile := logFile()
 			log.New(logFile, "", log.LstdFlags).Printf("%s\n\n", trace(message))
