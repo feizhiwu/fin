@@ -2,11 +2,12 @@
 
 gin风格的微型web api框架，内置gorm
 
-本框架仅供学习参考，不建议使用于生产环境
+本框架仅供学习参考，不建议用于生产环境
 
 想学gin+gorm？传送门：https://github.com/feizhiwu/go-stage
 
 ### 运行demo
+
 ```
 > git clone ...
 > cd fin

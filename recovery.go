@@ -21,18 +21,19 @@ func trace(message string) string {
 	return str.String()
 }
 
-func Recovery() HandlerFunc {
-	return func(c *Context) {
-		defer func() {
-			if err := recover(); err != nil {
-				//预设错误不输出stack trace
-				if _, ok := err.(int); !ok {
-					message := fmt.Sprintf("%s", err)
-					log.Printf("%s\n\n", trace(message))
-				}
-				c.NewDisplay().Show(err)
+func recovery(c *Context) {
+	defer func() {
+		if err := recover(); err != nil {
+			message := fmt.Sprintf("%s", err)
+			logFile := logFile()
+			log.New(logFile, "", log.LstdFlags).Printf("%s\n\n", trace(message))
+			log.New(logFile, "", log.LstdFlags).Printf("%s", "----------------------------------------------------------------------")
+			if Mode() == DebugMode {
+				log.Printf("%s\n\n", trace(message))
+				log.Printf("%s", "----------------------------------------------------------------------")
 			}
-		}()
-		c.Next()
-	}
+			c.NewDisplay().Show(err)
+		}
+	}()
+	c.Next()
 }

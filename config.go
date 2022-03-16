@@ -9,6 +9,7 @@ import (
 var (
 	configPath  string
 	messagePath string
+	logPath     string
 )
 
 func setConfig(path string) {
@@ -17,6 +18,10 @@ func setConfig(path string) {
 
 func setMessage(path string) {
 	messagePath = path
+}
+
+func setLog(path string) {
+	logPath = path
 }
 
 func Config(key string) interface{} {

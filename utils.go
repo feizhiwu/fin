@@ -1,12 +1,14 @@
 package fin
 
 import (
+	"bytes"
 	"crypto/md5"
 	"fmt"
 	"log"
 	"os"
 	"reflect"
 	"runtime"
+	"strconv"
 	"strings"
 )
 
@@ -46,4 +48,13 @@ func EncryptPass(pass string) string {
 	salt := Config("salt").(string)
 	sum := md5.Sum([]byte(pass + salt))
 	return fmt.Sprintf("%x", sum)
+}
+
+func GetGoroutineID() uint64 {
+	b := make([]byte, 64)
+	runtime.Stack(b, false)
+	b = bytes.TrimPrefix(b, []byte("goroutine "))
+	b = b[:bytes.IndexByte(b, ' ')]
+	n, _ := strconv.ParseUint(string(b), 10, 64)
+	return n
 }

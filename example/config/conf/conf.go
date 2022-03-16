@@ -2,21 +2,14 @@ package conf
 
 import (
 	"fin"
-	"github.com/jinzhu/gorm"
 	"os"
 	"path"
-)
-
-var (
-	MainDB   *gorm.DB
-	ClientDB *gorm.DB
+	"time"
 )
 
 func Run(engine *fin.Engine) {
 	dir, _ := os.Getwd()
 	engine.SetConfig(path.Join(dir, "/example/config/config.yml"))
 	engine.SetMessage(path.Join(dir, "/example/config/message.yml"))
-	db := engine.ConnectDB()
-	MainDB = db["main_db"]
-	ClientDB = db["client_db"]
+	engine.SetLog(path.Join(dir, "/example/data/runtime/log/"+time.Now().Format("200601")))
 }

@@ -12,6 +12,7 @@ type (
 	MS map[string]string
 	MU map[string]uint
 	MF map[string]func()
+	MG map[string]*gorm.DB
 )
 
 type HandlerFunc func(*Context)
@@ -33,7 +34,7 @@ func New() *Engine {
 	engine := &Engine{router: newRouter()}
 	engine.routerGroup = &routerGroup{engine: engine}
 	engine.groups = []*routerGroup{engine.routerGroup}
-	engine.Use(Logger(), Recovery())
+	engine.Use(recovery, logger)
 	return engine
 }
 
@@ -104,15 +105,16 @@ func (engine *Engine) SetMessage(path string) {
 	setMessage(path)
 }
 
-func (engine *Engine) ConnectDB() map[string]*gorm.DB {
-	db := connectDB()
-	return db.connects
+func (engine *Engine) SetLog(path string) {
+	setLog(path)
 }
 
 func (engine *Engine) Run(address string) (err error) {
 	defer func() { Assert(err == nil, err.Error()) }()
 	Assert(configPath != "", "config path is not set")
 	Assert(messagePath != "", "message path is not set")
+	Assert(logPath != "", "log path is not set")
+	connectDB()
 	log.Printf("Listening and serving HTTP on %s\n", address)
 	err = http.ListenAndServe(address, engine)
 	return

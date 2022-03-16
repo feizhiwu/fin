@@ -5,7 +5,9 @@ import (
 	"fmt"
 	"io/ioutil"
 	"math"
+	"net"
 	"net/http"
+	"strings"
 )
 
 type H map[string]interface{}
@@ -93,6 +95,25 @@ func (c *Context) GetHeader(key string) string {
 
 func (c *Context) requestHeader(key string) string {
 	return c.Request.Header.Get(key)
+}
+
+func (c *Context) ClientIP() string {
+	xForwardedFor := c.GetHeader("X-Forwarded-For")
+	ip := strings.TrimSpace(strings.Split(xForwardedFor, ",")[0])
+	if ip != "" {
+		return ip
+	}
+
+	ip = strings.TrimSpace(c.GetHeader("X-Real-Ip"))
+	if ip != "" {
+		return ip
+	}
+
+	if ip, _, err := net.SplitHostPort(strings.TrimSpace(c.Request.RemoteAddr)); err == nil {
+		return ip
+	}
+
+	return ""
 }
 
 func (c *Context) String(code int, format string, values ...interface{}) {
