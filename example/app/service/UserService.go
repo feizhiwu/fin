@@ -29,7 +29,6 @@ func (s *UserService) Update(data map[string]interface{}) {
 	s.UD = dao.User()
 	params := fin.CopyParams([]string{"id", "name", "password"}, data)
 	s.UD.Update(params)
-	panic(1111)
 }
 
 func (s *UserService) Delete(id uint) {
